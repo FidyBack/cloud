@@ -1,0 +1,10 @@
+#!/bin/bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib -y
+sudo -u postgres psql -c "CREATE USER mytasks WITH PASSWORD 'tasks';"
+sudo -u postgres psql -c "CREATE DATABASE alltasks OWNER mytasks;"
+sudo sed -i "59 c listen_addresses = '*'" /etc/postgresql/12/main/postgresql.conf
+sudo sed -i -e '$ahost        all         all             192.168.0.0/20          trust' /etc/postgresql/12/main/pg_hba.conf
+sudo ufw allow 5432/tcp
+sudo systemctl restart postgresql
+echo "End" > /home/ubuntu/end.txt
